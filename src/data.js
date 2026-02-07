@@ -27,7 +27,7 @@ export const initialGolfers = [
         id: 4,
         name: 'Bully',
         earnings: 18.25,
-        image: '/assets/images/golfer_caricature_4_1770326053225.png',
+        image: '/assets/images/golfer_caricature_1_1770326011803.png',
         photo: '/assets/images/bully_photo.jpg',
         pin: '4444'
     },
@@ -59,7 +59,7 @@ export const initialGolfers = [
         id: 8,
         name: 'Glyn',
         earnings: 0,
-        image: '/assets/images/glyn_caricature.png',
+        image: '/assets/images/golfer_caricature_2_1770326025546.png',
         photo: '/assets/images/glyn_photo.png',
         pin: '8888'
     }

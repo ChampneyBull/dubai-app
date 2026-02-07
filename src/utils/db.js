@@ -101,15 +101,14 @@ export const syncInitialData = async (initialGolfers) => {
                     is_admin: g.name === 'Phil'
                 }]);
         } else {
-            // If Phil already exists but has no image_url, update him
+            // Update image and photo to match current local data
             await supabase
                 .from('golfers')
                 .update({
                     image_url: g.image,
                     photo_url: g.photo || ''
                 })
-                .eq('id', g.id)
-                .is('image_url', null);
+                .eq('id', g.id);
         }
     }
 };
