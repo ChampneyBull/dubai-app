@@ -93,7 +93,7 @@ const Scoreboard = ({ golfers, onLogWinnings, onAdminOpen, user, onLogout }) => 
                 </>
             ) : (
                 <div className="flex-1 flex flex-col mb-24 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    <div className="bg-[#0f1a0f] rounded-[2.5rem] p-4 h-[750px] relative overflow-hidden border border-white/10 shadow-2xl flex flex-col">
+                    <div className="bg-[#0f1a0f] rounded-[2.5rem] p-4 h-[880px] relative overflow-hidden border border-white/10 shadow-2xl flex flex-col">
                         {/* Track Labels & Arrow */}
                         <div className="flex items-center justify-between px-4 pt-4 mb-4">
                             <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest whitespace-nowrap">VRA Golf Clubhouse</span>
