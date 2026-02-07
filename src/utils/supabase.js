@@ -14,8 +14,23 @@ try {
     );
 } catch (e) {
     console.error("Supabase Initialization Error:", e);
-    // Create a dummy object to prevent crashes on method calls
-    supabase = { from: () => ({ select: () => ({ order: () => ({}) }) }) };
+    // Create a robust dummy object to prevent app-wide crashes
+    const dummyResponse = { data: [], error: null, count: 0 };
+    const dummyChain = {
+        select: () => dummyChain,
+        eq: () => dummyChain,
+        order: () => dummyChain,
+        single: () => dummyChain,
+        maybeSingle: () => dummyChain,
+        limit: () => dummyChain,
+        insert: () => dummyChain,
+        update: () => dummyChain,
+        on: () => dummyChain,
+        subscribe: () => dummyChain,
+        channel: () => dummyChain,
+        then: (fn) => Promise.resolve(fn(dummyResponse))
+    };
+    supabase = { from: () => dummyChain, channel: () => dummyChain, removeChannel: () => { } };
 }
 
 export { supabase };
