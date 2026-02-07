@@ -3,8 +3,18 @@ import { Settings, Plus, LayoutDashboard, List } from 'lucide-react';
 
 const Scoreboard = ({ golfers, onLogWinnings, onAdminOpen, user, onLogout }) => {
     const [viewType, setViewType] = useState('list'); // 'list' or 'track'
+
+    if (!golfers || golfers.length === 0) {
+        return (
+            <div className="flex flex-col min-h-screen bg-[#0c140c] text-white items-center justify-center p-6 italic text-gray-500">
+                <div className="animate-spin mb-4 text-3xl">⛳️</div>
+                Loading Scoreboard...
+            </div>
+        );
+    }
+
     const sortedGolfers = [...golfers].sort((a, b) => b.earnings - a.earnings);
-    const leader = sortedGolfers[0];
+    const leader = sortedGolfers[0] || { name: '---', earnings: 0 };
     const MAX_EARNINGS = 250;
 
     return (

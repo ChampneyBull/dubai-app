@@ -86,7 +86,7 @@ export const syncInitialData = async (initialGolfers) => {
             .from('golfers')
             .select('id')
             .eq('id', g.id)
-            .single();
+            .maybeSingle();
 
         if (!existing) {
             await supabase

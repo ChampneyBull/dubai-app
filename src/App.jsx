@@ -13,20 +13,28 @@ function App() {
   const [requests, setRequests] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [initError, setInitError] = useState(null);
 
   useEffect(() => {
     const initApp = async () => {
       try {
         await syncInitialData(initialGolfers);
         const [gData, rData] = await Promise.all([getGolfers(), getRequests()]);
-        setGolfers(gData);
-        setRequests(rData);
+        setGolfers(gData || []);
+        setRequests(rData || []);
 
         // Check session
         const savedUser = localStorage.getItem('dubai_player');
-        if (savedUser) setUser(JSON.parse(savedUser));
+        if (savedUser) {
+          try {
+            setUser(JSON.parse(savedUser));
+          } catch (e) {
+            localStorage.removeItem('dubai_player');
+          }
+        }
       } catch (err) {
         console.error("Initialization error:", err);
+        setInitError(err.message);
       } finally {
         setLoading(false);
       }
@@ -38,14 +46,14 @@ function App() {
     const golfersSub = supabase
       .channel('golfers-changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'golfers' }, () => {
-        getGolfers().then(setGolfers);
+        getGolfers().then(setGolfers).catch(console.error);
       })
       .subscribe();
 
     const requestsSub = supabase
       .channel('requests-changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'winnings_requests' }, () => {
-        getRequests().then(setRequests);
+        getRequests().then(setRequests).catch(console.error);
       })
       .subscribe();
 
@@ -93,15 +101,36 @@ function App() {
     }
   };
 
-  if (loading || !golfers) return (
-    <div className="min-h-screen bg-[#0c140c] flex items-center justify-center">
-      <div className="animate-spin text-4xl">⛳️</div>
-    </div>
-  );
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0c140c] flex flex-col items-center justify-center text-[#7cfc00]">
+        <div className="animate-spin text-6xl mb-4">⛳️</div>
+        <p className="font-black uppercase tracking-widest text-xs animate-pulse">Establishing Connection...</p>
+      </div>
+    );
+  }
 
-  if (!user) return <Login onLogin={handleLogin} />;
+  if (initError && !user) {
+    return (
+      <div className="min-h-screen bg-[#0c140c] flex flex-col items-center justify-center p-10 text-center">
+        <div className="text-red-500 mb-6 text-5xl">⚠️</div>
+        <h1 className="text-white font-black text-xl mb-2">Clubhouse Connection Failed</h1>
+        <p className="text-gray-500 text-sm mb-8">{initError}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-8 py-3 bg-white/5 border border-white/10 rounded-2xl text-[#7cfc00] font-bold"
+        >
+          RETRY CONNECTION
+        </button>
+      </div>
+    );
+  }
 
-  const isAdmin = user.name === 'Phil' || user.is_admin;
+  if (!user) {
+    return <Login onLogin={handleLogin} />;
+  }
+
+  const isAdmin = user.name === 'Phil' || user.is_admin === true;
 
   return (
     <div className="min-h-screen bg-[#0c140c]">
@@ -111,7 +140,7 @@ function App() {
           onLogWinnings={() => setView('logger')}
           onAdminOpen={() => {
             if (isAdmin) setView('admin');
-            else alert("Only Admin can access this panel");
+            else alert("Access Restricted: Administrator Eyes Only");
           }}
           user={user}
           onLogout={handleLogout}
@@ -133,7 +162,7 @@ function App() {
           onApprove={handleApprove}
           onDeny={handleDeny}
           onBack={() => setView('scoreboard')}
-          onReset={() => alert("Contact DB Admin to reset production data")}
+          onReset={() => alert("Data resets must be performed by the DB Administrator (Secretary).")}
         />
       )}
     </div>
