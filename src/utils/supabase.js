@@ -1,11 +1,21 @@
 import { createClient } from '@supabase/supabase-js'
 
-// These will be replaced with your actual Supabase credentials
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn("Supabase credentials missing! App is running in demo mode.")
+console.log("Supabase URL present:", !!supabaseUrl);
+
+let supabase;
+
+try {
+    supabase = createClient(
+        supabaseUrl || 'https://placeholder.supabase.co',
+        supabaseAnonKey || 'placeholder'
+    );
+} catch (e) {
+    console.error("Supabase Initialization Error:", e);
+    // Create a dummy object to prevent crashes on method calls
+    supabase = { from: () => ({ select: () => ({ order: () => ({}) }) }) };
 }
 
-export const supabase = createClient(supabaseUrl || 'https://placeholder.supabase.co', supabaseAnonKey || 'placeholder')
+export { supabase };
