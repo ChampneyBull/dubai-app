@@ -108,12 +108,12 @@ const Scoreboard = ({ golfers, onLogWinnings, onAdminOpen, user, onLogout }) => 
                         {/* Race Lanes Grid */}
                         <div className="flex-1 flex flex-col border-t border-white/5">
                             {golfers.map((golfer, idx) => {
-                                // Calculate position with precision but ensure visual progress is balanced
-                                const position = (parseFloat(golfer.earnings) / MAX_EARNINGS) * 85;
+                                // Add a 10% offset to act as a "starting gate" so they aren't cut off at the edge
+                                const position = 10 + (parseFloat(golfer.earnings) / MAX_EARNINGS) * 80;
                                 return (
                                     <div key={golfer.id} className="flex-1 relative flex items-center border-b border-white/5 overflow-visible">
-                                        {/* Row Background Grid (vertical lines) */}
-                                        <div className="absolute inset-0 flex justify-between px-4 pointer-events-none opacity-5">
+                                        {/* Row Background Grid (vertical lines) shifted to match track */}
+                                        <div className="absolute inset-x-10 inset-y-0 flex justify-between pointer-events-none opacity-5">
                                             {[...Array(8)].map((_, i) => (
                                                 <div key={i} className="w-[1px] h-full bg-white"></div>
                                             ))}
