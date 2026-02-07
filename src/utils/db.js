@@ -98,18 +98,18 @@ export const syncInitialData = async (initialGolfers) => {
                     image_url: g.image,
                     photo_url: g.photo || '',
                     pin: g.pin,
-                    is_admin: g.name === 'Phil'
+                    is_admin: g.name === 'Phil' || g.name === 'Bully'
                 }]);
         } else {
-            // If Phil already exists but has no image_url, update him
+            // Always update assets to ensure they match data.js definitions
             await supabase
                 .from('golfers')
                 .update({
                     image_url: g.image,
-                    photo_url: g.photo || ''
+                    photo_url: g.photo || '',
+                    is_admin: g.name === 'Phil' || g.name === 'Bully'
                 })
-                .eq('id', g.id)
-                .is('image_url', null);
+                .eq('id', g.id);
         }
     }
 };

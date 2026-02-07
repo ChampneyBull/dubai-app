@@ -27,7 +27,7 @@ export const initialGolfers = [
         id: 4,
         name: 'Bully',
         earnings: 18.25,
-        image: '/assets/images/golfer_caricature_4_1770326053225.png',
+        image: '/assets/images/bully_caricature.png',
         photo: '/assets/images/bully_photo.jpg',
         pin: '4444'
     },
@@ -50,7 +50,7 @@ export const initialGolfers = [
     {
         id: 7,
         name: 'Tiger',
-        earnings: 63.06,
+        earnings: 63,
         image: '/assets/images/tiger_caricature.jpg',
         photo: '/assets/images/tiger_photo.jpg',
         pin: '7777'

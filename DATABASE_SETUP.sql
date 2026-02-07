@@ -46,7 +46,7 @@ VALUES
 (1, 'Phil', 65.00, '1111', TRUE, '/assets/images/phil_caricature.jpg', '/assets/images/phil_photo.png'),
 (2, 'Lewis', 9.00, '2222', FALSE, '/assets/images/lewis_caricature.jpg', '/assets/images/lewis_photo.png'),
 (3, 'Hulse', 0.00, '3333', FALSE, '/assets/images/hulse_caricature.png', '/assets/images/hulse_photo.png'),
-(4, 'Bully', 18.00, '4444', FALSE, '/assets/images/golfer_caricature_4_1770326053225.png', '/assets/images/bully_photo.jpg'),
+(4, 'Bully', 18.00, '4444', TRUE, '/assets/images/bully_caricature.png', '/assets/images/bully_photo.jpg'),
 (5, 'Andy', 0.00, '5555', FALSE, '/assets/images/andy_caricature.jpg', '/assets/images/andy_photo.png'),
 (6, 'Geoff', 0.00, '6666', FALSE, '/assets/images/geoff_caricature.jpg', '/assets/images/geoff_photo.jpg'),
 (7, 'Tiger', 63.00, '7777', FALSE, '/assets/images/tiger_caricature.jpg', '/assets/images/tiger_photo.jpg'),
