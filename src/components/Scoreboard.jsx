@@ -60,16 +60,16 @@ const Scoreboard = ({ golfers, onLogWinnings, onAdminOpen, user, onLogout }) => 
             {viewType === 'list' ? (
                 <>
                     {/* Leader card */}
-                    <div className="bg-gradient-to-br from-[#1b5e20] to-[#2e7d32] rounded-[2rem] p-6 mb-8 relative overflow-hidden shadow-2xl shadow-green-900/20">
+                    <div className="bg-gradient-to-br from-[#1b5e20] to-[#2e7d32] rounded-[2.5rem] p-8 mb-10 relative overflow-hidden shadow-2xl shadow-green-900/30 min-h-[220px] flex flex-col justify-center">
                         <div className="relative z-10">
-                            <span className="bg-black/20 text-[#7cfc00] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Season Leader</span>
-                            <h2 className="text-4xl font-black mt-4 mb-2">{leader.name}</h2>
+                            <span className="bg-black/30 text-[#7cfc00] text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">Season Leader</span>
+                            <h2 className="text-5xl font-black mt-6 mb-2 tracking-tighter">{leader.name}</h2>
                             <div className="flex items-baseline space-x-2">
-                                <span className="text-5xl font-black text-white">£{Math.floor(leader.earnings).toLocaleString()}</span>
+                                <span className="text-6xl font-black text-white drop-shadow-lg">£{Math.floor(leader.earnings).toLocaleString()}</span>
                             </div>
                         </div>
-                        <div className="absolute right-[-20px] bottom-[-20px] opacity-20 rotate-[-15deg]">
-                            <img src={leader.image} alt="" className="w-48" />
+                        <div className="absolute right-[-30px] bottom-[-40px] opacity-30 rotate-[-10deg] scale-110 pointer-events-none">
+                            <img src={leader.image} alt="" className="w-64" />
                         </div>
                     </div>
 
