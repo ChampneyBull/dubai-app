@@ -77,7 +77,7 @@ function App() {
     try {
       await submitWinnings(request);
       setView('scoreboard');
-      alert('Winnings request sent to Admin!');
+      alert('Winnings request sent to Phil, Chair of bettley tours!');
     } catch (err) {
       alert("Error submitting winnings: " + err.message);
     }
@@ -162,7 +162,7 @@ function App() {
           onApprove={handleApprove}
           onDeny={handleDeny}
           onBack={() => setView('scoreboard')}
-          onReset={() => alert("Data resets must be performed by the DB Administrator (Secretary).")}
+          onReset={() => alert("Data resets must be performed by Phil Bettley, Directorv-vBettley Tours")}
         />
       )}
     </div>
