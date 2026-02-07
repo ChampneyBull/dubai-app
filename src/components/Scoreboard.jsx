@@ -32,15 +32,16 @@ const Scoreboard = ({ golfers, onLogWinnings, onAdminOpen, user, onLogout }) => 
                 <div className="flex items-center space-x-2">
                     <button
                         onClick={onLogout}
-                        className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors border border-white/5 text-red-500/70"
+                        className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors border border-white/5 text-red-500"
                         title="Log Out"
                     >
-                        <Settings className="w-5 h-5 opacity-0 absolute" />
-                        <span className="text-xs font-black">OUT</span>
+                        <span className="text-[10px] font-black uppercase tracking-wider">Exit</span>
                     </button>
-                    <button onClick={onAdminOpen} className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors border border-white/5">
-                        <Settings className="w-5 h-5 text-gray-400" />
-                    </button>
+                    {(user.name === 'Phil' || user.name === 'Bully') && (
+                        <button onClick={onAdminOpen} className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors border border-white/5">
+                            <Settings className="w-5 h-5 text-gray-400" />
+                        </button>
+                    )}
                     <button
                         onClick={() => setViewType(viewType === 'list' ? 'track' : 'list')}
                         className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors border border-white/5"
@@ -92,7 +93,7 @@ const Scoreboard = ({ golfers, onLogWinnings, onAdminOpen, user, onLogout }) => 
                 </>
             ) : (
                 <div className="flex-1 flex flex-col mb-24 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    <div className="bg-[#0f1a0f] rounded-[2.5rem] p-4 h-[750px] relative overflow-hidden border border-white/10 shadow-2xl">
+                    <div className="bg-[#0f1a0f] rounded-[2.5rem] p-4 h-[750px] relative overflow-hidden border border-white/10 shadow-2xl flex flex-col">
                         {/* Track Labels & Arrow */}
                         <div className="flex items-center justify-between px-4 pt-4 mb-4">
                             <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest whitespace-nowrap">VRA Golf Clubhouse</span>
@@ -102,30 +103,32 @@ const Scoreboard = ({ golfers, onLogWinnings, onAdminOpen, user, onLogout }) => 
                             <span className="text-[10px] font-black text-[#ffcc00] uppercase tracking-widest">Dubai</span>
                         </div>
 
-                        {/* Track Grid Background */}
-                        <div className="absolute inset-0 top-16 left-4 right-4 bottom-4 opacity-5 pointer-events-none" style={{
-                            backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 49px, white 50px), repeating-linear-gradient(0deg, transparent, transparent 79px, white 80px)'
-                        }}></div>
-
-                        {/* Race Lanes */}
-                        <div className="relative h-[calc(100%-60px)] flex flex-col justify-between py-4">
-                            {golfers.map((golfer) => {
+                        {/* Race Lanes Grid */}
+                        <div className="flex-1 flex flex-col border-t border-white/5">
+                            {golfers.map((golfer, idx) => {
                                 const position = (golfer.earnings / MAX_EARNINGS) * 85;
                                 return (
-                                    <div key={golfer.id} className="relative h-16 w-full group border-b border-white/5 last:border-0">
+                                    <div key={golfer.id} className="flex-1 relative flex items-center border-b border-white/5 overflow-visible">
+                                        {/* Row Background Grid (vertical lines) */}
+                                        <div className="absolute inset-0 flex justify-between px-4 pointer-events-none opacity-5">
+                                            {[...Array(6)].map((_, i) => (
+                                                <div key={i} className="w-[1px] h-full bg-white"></div>
+                                            ))}
+                                        </div>
+
                                         <div
-                                            className="absolute transition-all duration-[1500ms] cubic-bezier(0.34, 1.56, 0.64, 1)"
+                                            className="absolute transition-all duration-[1500ms] cubic-bezier(0.34, 1.56, 0.64, 1) z-20"
                                             style={{ left: `${position}%` }}
                                         >
                                             <div className="flex flex-col items-center">
                                                 {/* Label Badge */}
-                                                <div className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 mb-1 flex items-center shadow-lg">
+                                                <div className="bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 mb-1 flex items-center shadow-lg">
                                                     <span className="text-[10px] font-black text-white whitespace-nowrap">
                                                         {golfer.name} <span className="text-[#7cfc00]">£{golfer.earnings}</span>
                                                     </span>
                                                 </div>
                                                 {/* Caricature */}
-                                                <div className="w-14 h-14 relative group-hover:scale-110 transition-transform">
+                                                <div className="w-14 h-14 translate-y-[-2px]">
                                                     <img
                                                         src={golfer.image}
                                                         alt={golfer.name}

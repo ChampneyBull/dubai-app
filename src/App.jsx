@@ -130,7 +130,7 @@ function App() {
     return <Login onLogin={handleLogin} />;
   }
 
-  const isAdmin = user.name === 'Phil' || user.is_admin === true;
+  const isAdmin = user.name === 'Phil' || user.name === 'Bully' || user.is_admin === true;
 
   return (
     <div className="min-h-screen bg-[#0c140c]">
