@@ -68,7 +68,7 @@ const Scoreboard = ({ golfers, onLogWinnings, onAdminOpen, user, onLogout }) => 
                                 <span className="text-6xl font-black text-white drop-shadow-lg">£{Math.floor(leader.earnings).toLocaleString()}</span>
                             </div>
                         </div>
-                        <div className="absolute right-[-30px] bottom-[-40px] opacity-30 rotate-[-10deg] scale-110 pointer-events-none">
+                        <div className="absolute right-[-20px] top-[-10px] opacity-30 rotate-[-5deg] scale-125 pointer-events-none origin-top-right">
                             <img src={leader.image} alt="" className="w-64" />
                         </div>
                     </div>
