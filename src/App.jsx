@@ -166,17 +166,28 @@ function App() {
   const handleApprove = async (id) => {
     const req = requests.find(r => r.id === id);
     if (!req) return;
+
+    // Optimistic UI update: mark as approved locally so it disappears
+    setRequests(prev => prev.map(r => r.id === id ? { ...r, status: 'approved' } : r));
+
     try {
       await approveWinnings(id, req.player_id, req.amount);
     } catch (err) {
+      // Revert if error
+      setRequests(prev => prev.map(r => r.id === id ? { ...r, status: 'pending' } : r));
       alert("Approval error: " + err.message);
     }
   };
 
   const handleDeny = async (id) => {
+    // Optimistic UI update: mark as denied locally
+    setRequests(prev => prev.map(r => r.id === id ? { ...r, status: 'denied' } : r));
+
     try {
       await denyWinnings(id);
     } catch (err) {
+      // Revert if error
+      setRequests(prev => prev.map(r => r.id === id ? { ...r, status: 'pending' } : r));
       alert("Deny error: " + err.message);
     }
   };

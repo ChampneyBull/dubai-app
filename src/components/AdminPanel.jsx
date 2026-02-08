@@ -2,7 +2,14 @@ import React from 'react';
 import { Check, X, ShieldAlert, History, RefreshCcw } from 'lucide-react';
 
 const AdminPanel = ({ requests, onApprove, onDeny, onBack, onReset }) => {
+    const [processingId, setProcessingId] = React.useState(null);
     const pendingRequests = requests.filter(r => r.status === 'pending');
+
+    const handleAction = async (id, actionFn) => {
+        setProcessingId(id);
+        await actionFn(id);
+        setProcessingId(null);
+    };
 
     return (
         <div className="flex flex-col h-screen bg-[#0c140c] text-white overflow-hidden max-w-sm mx-auto p-6">
@@ -34,7 +41,7 @@ const AdminPanel = ({ requests, onApprove, onDeny, onBack, onReset }) => {
                     </div>
                 ) : (
                     pendingRequests.map(req => (
-                        <div key={req.id} className="bg-white/5 rounded-3xl p-5 border border-white/5">
+                        <div key={req.id} className={`bg-white/5 rounded-3xl p-5 border border-white/5 transition-opacity ${processingId === req.id ? 'opacity-50' : 'opacity-100'}`}>
                             <div className="flex justify-between items-start mb-4">
                                 <div>
                                     <h3 className="font-black text-lg">{req.playerName}</h3>
@@ -42,7 +49,7 @@ const AdminPanel = ({ requests, onApprove, onDeny, onBack, onReset }) => {
                                 </div>
                                 <div className="text-right">
                                     <span className="text-gray-500 text-[10px] uppercase font-bold tracking-tighter">
-                                        {new Date(req.date).toLocaleDateString()}
+                                        {new Date(req.created_at || Date.now()).toLocaleDateString()}
                                     </span>
                                 </div>
                             </div>
@@ -53,15 +60,17 @@ const AdminPanel = ({ requests, onApprove, onDeny, onBack, onReset }) => {
 
                             <div className="flex space-x-3">
                                 <button
-                                    onClick={() => onApprove(req.id)}
-                                    className="flex-1 bg-[#7cfc00] text-black py-3 rounded-2xl font-black text-sm flex items-center justify-center space-x-2 transition-transform active:scale-95"
+                                    onClick={() => handleAction(req.id, onApprove)}
+                                    disabled={processingId !== null}
+                                    className="flex-1 bg-[#7cfc00] text-black py-3 rounded-2xl font-black text-sm flex items-center justify-center space-x-2 transition-transform active:scale-95 disabled:opacity-50 disabled:scale-100"
                                 >
                                     <Check className="w-4 h-4" />
-                                    <span>APPROVE</span>
+                                    <span>{processingId === req.id ? '...' : 'APPROVE'}</span>
                                 </button>
                                 <button
-                                    onClick={() => onDeny(req.id)}
-                                    className="bg-red-500/10 text-red-500 p-3 px-6 rounded-2xl font-bold text-sm transition-colors hover:bg-red-500/20 active:scale-95"
+                                    onClick={() => handleAction(req.id, onDeny)}
+                                    disabled={processingId !== null}
+                                    className="bg-red-500/10 text-red-500 p-3 px-6 rounded-2xl font-bold text-sm transition-colors hover:bg-red-500/20 active:scale-95 disabled:opacity-30 disabled:scale-100"
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
