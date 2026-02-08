@@ -6,6 +6,7 @@ import Login from './components/Login';
 import ClaimProfile from './components/ClaimProfile';
 import { supabase } from './utils/supabase';
 import { getGolfers, getRequests, submitWinnings, approveWinnings, denyWinnings, syncInitialData, linkGolferToSocial } from './utils/db';
+import { initialGolfers } from './data';
 
 function App() {
   const [view, setView] = useState('scoreboard'); // 'scoreboard', 'logger', 'admin', 'claim-profile'
@@ -18,8 +19,7 @@ function App() {
   useEffect(() => {
     const initApp = async () => {
       try {
-        await syncInitialData(initialGolfers);
-
+        console.log("App: Fetching clubhouse data...");
         const [gData, rData] = await Promise.all([getGolfers(), getRequests()]);
         setGolfers(gData || []);
         setRequests(rData || []);
