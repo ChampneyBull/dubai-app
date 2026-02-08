@@ -3,18 +3,21 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-console.log("Supabase URL present:", !!supabaseUrl);
-
 let supabase;
 
 try {
-    supabase = createClient(
-        supabaseUrl || 'https://placeholder.supabase.co',
-        supabaseAnonKey || 'placeholder'
-    );
+    if (!supabaseUrl || !supabaseAnonKey) {
+        throw new Error("Missing Supabase URL or Key in environment variables.");
+    }
+
+    supabase = createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true
+        }
+    });
 } catch (e) {
     console.error("Supabase Initialization Error:", e);
-    // Create a robust dummy object to prevent app-wide crashes
     const dummyResponse = { data: [], error: null, count: 0 };
     const dummyChain = {
         select: () => dummyChain,
@@ -30,7 +33,18 @@ try {
         channel: () => dummyChain,
         then: (fn) => Promise.resolve(fn(dummyResponse))
     };
-    supabase = { from: () => dummyChain, channel: () => dummyChain, removeChannel: () => { } };
+    const dummyAuth = {
+        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+        onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => { } } } }),
+        signOut: () => Promise.resolve({ error: null }),
+        signInWithOAuth: () => Promise.resolve({ error: null })
+    };
+    supabase = {
+        from: () => dummyChain,
+        channel: () => dummyChain,
+        removeChannel: () => { },
+        auth: dummyAuth
+    };
 }
 
 export { supabase };

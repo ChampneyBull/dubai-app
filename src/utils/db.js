@@ -80,36 +80,49 @@ export const denyWinnings = async (requestId) => {
 
 // Initial sync to upload local golfer data to the DB if empty
 export const syncInitialData = async (initialGolfers) => {
-    // Check golfers one by one to fill in blanks
-    for (const g of initialGolfers) {
-        const { data: existing } = await supabase
-            .from('golfers')
-            .select('id')
-            .eq('id', g.id)
-            .maybeSingle();
+    console.log("DB: Starting data sync for", initialGolfers.length, "golfers...");
+    try {
+        const syncPromises = initialGolfers.map(async (g) => {
+            const { data: existing, error: fetchError } = await supabase
+                .from('golfers')
+                .select('id')
+                .eq('id', g.id)
+                .maybeSingle();
 
-        if (!existing) {
-            await supabase
-                .from('golfers')
-                .insert([{
-                    id: g.id,
-                    name: g.name,
-                    earnings: g.earnings,
-                    image_url: g.image,
-                    photo_url: g.photo || '',
-                    pin: g.pin,
-                    is_admin: g.name === 'Phil' || g.name === 'Bully'
-                }]);
-        } else {
-            // Always update assets to ensure they match data.js definitions
-            await supabase
-                .from('golfers')
-                .update({
-                    image_url: g.image,
-                    photo_url: g.photo || '',
-                    is_admin: g.name === 'Phil' || g.name === 'Bully'
-                })
-                .eq('id', g.id);
-        }
+            if (fetchError) {
+                console.warn(`DB: Error checking golfer ${g.name}:`, fetchError);
+                return;
+            }
+
+            if (!existing) {
+                await supabase
+                    .from('golfers')
+                    .insert([{
+                        id: g.id,
+                        name: g.name,
+                        earnings: g.earnings,
+                        image_url: g.image,
+                        photo_url: g.photo || '',
+                        pin: g.pin,
+                        is_admin: g.name === 'Phil' || g.name === 'Bully'
+                    }]);
+            } else {
+                // Always update assets to ensure they match data.js definitions
+                await supabase
+                    .from('golfers')
+                    .update({
+                        image_url: g.image,
+                        photo_url: g.photo || '',
+                        is_admin: g.name === 'Phil' || g.name === 'Bully'
+                    })
+                    .eq('id', g.id);
+            }
+        });
+
+        await Promise.all(syncPromises);
+        console.log("DB: Data sync complete.");
+    } catch (err) {
+        console.error("DB: Sync failed:", err);
+        // Don't throw, let the app try to load anyway
     }
 };
