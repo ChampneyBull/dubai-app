@@ -78,6 +78,19 @@ export const denyWinnings = async (requestId) => {
     if (error) throw error;
 };
 
+// Link a golfer profile to a social account
+export const linkGolferToSocial = async (golferId, email, userId) => {
+    const { error } = await supabase
+        .from('golfers')
+        .update({
+            email: email,
+            supabase_id: userId
+        })
+        .eq('id', golferId);
+
+    if (error) throw error;
+};
+
 // Initial sync to upload local golfer data to the DB if empty
 export const syncInitialData = async (initialGolfers) => {
     console.log("DB: Starting data sync for", initialGolfers.length, "golfers...");

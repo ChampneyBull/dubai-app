@@ -3,12 +3,12 @@ import Scoreboard from './components/Scoreboard';
 import WinningsLogger from './components/WinningsLogger';
 import AdminPanel from './components/AdminPanel';
 import Login from './components/Login';
+import ClaimProfile from './components/ClaimProfile';
 import { supabase } from './utils/supabase';
-import { getGolfers, getRequests, submitWinnings, approveWinnings, denyWinnings, syncInitialData } from './utils/db';
-import { initialGolfers } from './data';
+import { getGolfers, getRequests, submitWinnings, approveWinnings, denyWinnings, syncInitialData, linkGolferToSocial } from './utils/db';
 
 function App() {
-  const [view, setView] = useState('scoreboard'); // 'scoreboard', 'logger', 'admin'
+  const [view, setView] = useState('scoreboard'); // 'scoreboard', 'logger', 'admin', 'claim-profile'
   const [golfers, setGolfers] = useState([]);
   const [requests, setRequests] = useState([]);
   const [user, setUser] = useState(null);
@@ -39,13 +39,15 @@ function App() {
             console.log("App: Linked to golfer profile:", matchingGolfer.name);
             setUser({ ...matchingGolfer, is_social: true });
           } else {
-            const socialUser = {
+            const tempSocialUser = {
               id: session.user.id,
+              email: session.user.email,
               name: session.user.user_metadata.full_name || session.user.email.split('@')[0],
               image: session.user.user_metadata.avatar_url,
               is_social: true
             };
-            setUser(socialUser);
+            setUser(tempSocialUser);
+            setView('claim-profile');
           }
         } else {
           const savedUser = localStorage.getItem('dubai_player');
@@ -79,13 +81,16 @@ function App() {
 
         if (matchingGolfer) {
           setUser({ ...matchingGolfer, is_social: true });
+          setView('scoreboard');
         } else {
           setUser({
             id: session.user.id,
+            email: session.user.email,
             name: session.user.user_metadata.full_name || session.user.email.split('@')[0],
             image: session.user.user_metadata.avatar_url,
             is_social: true
           });
+          setView('claim-profile');
         }
       } else if (!localStorage.getItem('dubai_player')) {
         setUser(null);
@@ -218,6 +223,17 @@ function App() {
           onDeny={handleDeny}
           onBack={() => setView('scoreboard')}
           onReset={() => alert("Data resets must be performed by Phil Bettley, Directorv-vBettley Tours")}
+        />
+      )}
+
+      {view === 'claim-profile' && (
+        <ClaimProfile
+          golfers={golfers}
+          socialUser={user}
+          onProfileLinked={() => {
+            // Re-run init to pick up the new mapping
+            window.location.reload();
+          }}
         />
       )}
     </div>
