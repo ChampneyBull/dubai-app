@@ -20,7 +20,22 @@ function App() {
     const initApp = async () => {
       try {
         console.log("App: Fetching clubhouse data...");
-        const [gData, rData] = await Promise.all([getGolfers(), getRequests()]);
+        // Fetch with a 4s safety timeout
+        const fetchWithTimeout = Promise.race([
+          Promise.all([getGolfers(), getRequests()]),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("Database Timeout")), 4000))
+        ]);
+
+        let gData, rData;
+        try {
+          [gData, rData] = await fetchWithTimeout;
+          console.log("App: Database synced.");
+        } catch (fetchErr) {
+          console.warn("App: Database fetch failed or timed out. Falling back to local data.", fetchErr.message);
+          gData = initialGolfers.map(g => ({ ...g, image_url: g.image, photo_url: g.photo }));
+          rData = [];
+        }
+
         setGolfers(gData || []);
         setRequests(rData || []);
 
