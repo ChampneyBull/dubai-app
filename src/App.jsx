@@ -39,8 +39,13 @@ function App() {
         setGolfers(gData || []);
         setRequests(rData || []);
 
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        if (sessionError) throw sessionError;
+        const { data: { session }, error: sessionError } = await Promise.race([
+          supabase.auth.getSession(),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("Auth Check Timeout")), 3000))
+        ]).catch(err => {
+          console.warn("App: Auth session check timed out or failed:", err.message);
+          return { data: { session: null }, error: null };
+        });
 
         if (session?.user) {
           console.log("App: Social session found for:", session.user.email);
@@ -75,9 +80,10 @@ function App() {
           }
         }
       } catch (err) {
-        console.error("App: Initialization failed:", err);
+        console.error("App: Initialization critical failure:", err);
         setInitError(err.message);
       } finally {
+        console.log("App: Clean boot complete.");
         setLoading(false);
       }
     };
