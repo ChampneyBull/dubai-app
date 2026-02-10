@@ -61,12 +61,15 @@ function App() {
 
             // Self-healing: If matched by email but missing supabase_id, sync it now
             if (!matchingGolfer.supabase_id) {
-              console.log("App: Auto-syncing Supabase ID for", matchingGolfer.name);
+              console.log("App: Triggering ID sync for", matchingGolfer.name);
+              alert("Wait! Attempting to link your account to '" + matchingGolfer.name + "'...");
               linkGolferToSocial(matchingGolfer.id, session.user.email, session.user.id)
-                .then(() => console.log("App: Auto-sync successful"))
+                .then(() => {
+                  alert("Success! Your account is now linked to " + matchingGolfer.name);
+                  window.location.reload();
+                })
                 .catch(err => {
-                  console.error("App: Auto-sync failed:", err);
-                  alert("Auto-sync failed: " + err.message);
+                  alert("Link Failed: " + err.message);
                 });
             }
           } else {
@@ -117,8 +120,12 @@ function App() {
           // Self-healing: Sync ID during fresh login if missing
           if (!matchingGolfer.supabase_id) {
             console.log("App: Auto-syncing Supabase ID during login for", matchingGolfer.name);
+            alert("Linking your login to profile: " + matchingGolfer.name);
             linkGolferToSocial(matchingGolfer.id, session.user.email, session.user.id)
-              .then(() => console.log("App: Login auto-sync successful"))
+              .then(() => {
+                alert("Success! Link established.");
+                window.location.reload();
+              })
               .catch(err => {
                 console.error("App: Login auto-sync failed:", err);
                 alert("Login sync failed: " + err.message);

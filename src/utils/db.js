@@ -88,8 +88,7 @@ export const denyWinnings = async (requestId) => {
 
 // Link a golfer profile to a social account
 export const linkGolferToSocial = async (golferId, email, userId) => {
-    // We only update the supabase_id to establish the link. 
-    // Updating the email can trigger unique constraint violations if cases differ.
+    console.log(`DB: Linking golfer ${golferId} to user ${userId}...`);
     const { data, error } = await supabase
         .from('golfers')
         .update({
@@ -98,7 +97,16 @@ export const linkGolferToSocial = async (golferId, email, userId) => {
         .eq('id', golferId)
         .select();
 
-    if (error) throw error;
+    if (error) {
+        console.error("DB: Link Error:", error);
+        throw error;
+    }
+
+    if (!data || data.length === 0) {
+        throw new Error("No golfer found with ID " + golferId + " or permission denied.");
+    }
+
+    console.log("DB: Link record updated successfully.");
     return data;
 };
 
