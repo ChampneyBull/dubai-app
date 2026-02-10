@@ -3,7 +3,7 @@ import { KeyRound, ShieldCheck, LogIn } from 'lucide-react';
 import { initialGolfers } from '../data';
 import { supabase } from '../utils/supabase';
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, golfers }) => {
     const [selectedGolfer, setSelectedGolfer] = useState(null);
     const [pin, setPin] = useState('');
     const [error, setError] = useState('');
@@ -16,7 +16,7 @@ const Login = ({ onLogin }) => {
             return;
         }
 
-        if (pin === selectedGolfer.pin || (selectedGolfer.name === 'Phil' && pin === '1234')) {
+        if (pin === selectedGolfer.pin) {
             onLogin(selectedGolfer);
         } else {
             setError('Invalid PIN for ' + selectedGolfer.name);
@@ -93,7 +93,7 @@ const Login = ({ onLogin }) => {
                 <div className="bg-white/5 rounded-[2rem] p-6 border border-white/10">
                     <label className="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-2">Who are you?</label>
                     <div className="grid grid-cols-4 gap-4">
-                        {initialGolfers.map((golfer) => (
+                        {(golfers && golfers.length > 0 ? golfers : initialGolfers).map((golfer) => (
                             <button
                                 key={golfer.id}
                                 onClick={() => {

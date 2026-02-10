@@ -219,7 +219,7 @@ function App() {
   }
 
   if (!user) {
-    return <Login onLogin={handleLogin} />;
+    return <Login onLogin={handleLogin} golfers={golfers} />;
   }
 
   const isAdmin = user.name === 'Phil' || user.name === 'Bully' || user.is_admin === true;
