@@ -23,7 +23,7 @@ function App() {
         // Fetch with a 4s safety timeout
         const fetchWithTimeout = Promise.race([
           Promise.all([getGolfers(), getRequests()]),
-          new Promise((_, reject) => setTimeout(() => reject(new Error("Database Timeout")), 20000))
+          new Promise((_, reject) => setTimeout(() => reject(new Error("Database Timeout")), 4000))
         ]);
 
         let gData, rData;

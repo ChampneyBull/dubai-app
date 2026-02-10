@@ -5,7 +5,7 @@ export const initialGolfers = [
         earnings: 65,
         image: '/assets/images/phil_caricature.jpg',
         photo: '/assets/images/phil_photo.png',
-        pin: '1111'
+        pin: '2898'
     },
     {
         id: 2,
@@ -29,7 +29,7 @@ export const initialGolfers = [
         earnings: 18.25,
         image: '/assets/images/bully_caricature.png',
         photo: '/assets/images/bully_photo.jpg',
-        pin: '4444'
+        pin: '2898'
     },
     {
         id: 5,
