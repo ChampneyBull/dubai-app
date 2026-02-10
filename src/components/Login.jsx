@@ -153,7 +153,10 @@ const Login = ({ onLogin, golfers }) => {
                 </form>
             </div>
 
-            <p className="mt-12 text-gray-700 text-[9px] font-bold uppercase tracking-widest">Powered by VRA Golf Technology</p>
+            <p className="mt-12 text-gray-700 text-[9px] font-bold uppercase tracking-widest text-center">
+                Powered by VRA Golf Technology<br />
+                <span className="text-gray-800">Build: 16:25-DB-ONLY</span>
+            </p>
         </div>
     );
 };
