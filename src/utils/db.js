@@ -88,15 +88,18 @@ export const denyWinnings = async (requestId) => {
 
 // Link a golfer profile to a social account
 export const linkGolferToSocial = async (golferId, email, userId) => {
-    const { error } = await supabase
+    // We only update the supabase_id to establish the link. 
+    // Updating the email can trigger unique constraint violations if cases differ.
+    const { data, error } = await supabase
         .from('golfers')
         .update({
-            email: email,
             supabase_id: userId
         })
-        .eq('id', golferId);
+        .eq('id', golferId)
+        .select();
 
     if (error) throw error;
+    return data;
 };
 
 // Initial sync to upload local golfer data to the DB if empty

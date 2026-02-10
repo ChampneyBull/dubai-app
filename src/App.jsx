@@ -63,7 +63,11 @@ function App() {
             if (!matchingGolfer.supabase_id) {
               console.log("App: Auto-syncing Supabase ID for", matchingGolfer.name);
               linkGolferToSocial(matchingGolfer.id, session.user.email, session.user.id)
-                .catch(err => console.error("App: Auto-sync failed:", err));
+                .then(() => console.log("App: Auto-sync successful"))
+                .catch(err => {
+                  console.error("App: Auto-sync failed:", err);
+                  alert("Auto-sync failed: " + err.message);
+                });
             }
           } else {
             const tempSocialUser = {
@@ -114,7 +118,11 @@ function App() {
           if (!matchingGolfer.supabase_id) {
             console.log("App: Auto-syncing Supabase ID during login for", matchingGolfer.name);
             linkGolferToSocial(matchingGolfer.id, session.user.email, session.user.id)
-              .catch(err => console.error("App: Login auto-sync failed:", err));
+              .then(() => console.log("App: Login auto-sync successful"))
+              .catch(err => {
+                console.error("App: Login auto-sync failed:", err);
+                alert("Login sync failed: " + err.message);
+              });
           }
 
           setView('scoreboard');
