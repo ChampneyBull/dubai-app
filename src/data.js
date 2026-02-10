@@ -5,7 +5,7 @@ export const initialGolfers = [
         earnings: 65,
         image: '/assets/images/phil_caricature.jpg',
         photo: '/assets/images/phil_photo.png',
-        pin: ''
+        pin: '1111'
     },
     {
         id: 2,
@@ -13,7 +13,7 @@ export const initialGolfers = [
         earnings: 9,
         image: '/assets/images/lewis_caricature.jpg',
         photo: '/assets/images/lewis_photo.png',
-        pin: ''
+        pin: '2222'
     },
     {
         id: 3,
@@ -21,7 +21,7 @@ export const initialGolfers = [
         earnings: 0,
         image: '/assets/images/hulse_caricature.png',
         photo: '/assets/images/hulse_photo.png',
-        pin: ''
+        pin: '3333'
     },
     {
         id: 4,
@@ -29,7 +29,7 @@ export const initialGolfers = [
         earnings: 18.25,
         image: '/assets/images/bully_caricature.png',
         photo: '/assets/images/bully_photo.jpg',
-        pin: ''
+        pin: '4444'
     },
     {
         id: 5,
@@ -37,7 +37,7 @@ export const initialGolfers = [
         earnings: 0,
         image: '/assets/images/andy_caricature.jpg',
         photo: '/assets/images/andy_photo.png',
-        pin: ''
+        pin: '5555'
     },
     {
         id: 6,
@@ -45,7 +45,7 @@ export const initialGolfers = [
         earnings: 0,
         image: '/assets/images/geoff_caricature.jpg',
         photo: '/assets/images/geoff_photo.jpg',
-        pin: ''
+        pin: '6666'
     },
     {
         id: 7,
@@ -53,7 +53,7 @@ export const initialGolfers = [
         earnings: 63,
         image: '/assets/images/tiger_caricature.jpg',
         photo: '/assets/images/tiger_photo.jpg',
-        pin: ''
+        pin: '7777'
     },
     {
         id: 8,
@@ -61,6 +61,6 @@ export const initialGolfers = [
         earnings: 0,
         image: '/assets/images/glyn_caricature.png',
         photo: '/assets/images/glyn_photo.png',
-        pin: ''
+        pin: '8888'
     }
 ];
