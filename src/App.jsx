@@ -61,15 +61,13 @@ function App() {
 
             // Self-healing: If matched by email but missing supabase_id, sync it now
             if (!matchingGolfer.supabase_id) {
-              console.log("App: Triggering ID sync for", matchingGolfer.name);
-              alert("Wait! Attempting to link your account to '" + matchingGolfer.name + "'...");
+              console.log("App: Syncing ID for", matchingGolfer.name);
               linkGolferToSocial(matchingGolfer.id, session.user.email, session.user.id)
                 .then(() => {
-                  alert("Success! Your account is now linked to " + matchingGolfer.name);
                   window.location.reload();
                 })
                 .catch(err => {
-                  alert("Link Failed: " + err.message);
+                  console.error("App: Sync failed:", err);
                 });
             }
           } else {
@@ -120,15 +118,12 @@ function App() {
           // Self-healing: Sync ID during fresh login if missing
           if (!matchingGolfer.supabase_id) {
             console.log("App: Auto-syncing Supabase ID during login for", matchingGolfer.name);
-            alert("Linking your login to profile: " + matchingGolfer.name);
             linkGolferToSocial(matchingGolfer.id, session.user.email, session.user.id)
               .then(() => {
-                alert("Success! Link established.");
                 window.location.reload();
               })
               .catch(err => {
                 console.error("App: Login auto-sync failed:", err);
-                alert("Login sync failed: " + err.message);
               });
           }
 
@@ -253,12 +248,14 @@ function App() {
   }
 
   const isAdmin = user.name === 'Phil' || user.name === 'Bully' || user.is_admin === true;
+  const pendingRequestsCount = (requests || []).filter(r => r.status === 'pending').length;
 
   return (
     <div className="min-h-screen bg-[#0c140c]">
       {view === 'scoreboard' && (
         <Scoreboard
           golfers={golfers}
+          pendingCount={pendingRequestsCount}
           onLogWinnings={() => setView('logger')}
           onAdminOpen={() => {
             if (isAdmin) setView('admin');
@@ -284,7 +281,7 @@ function App() {
           onApprove={handleApprove}
           onDeny={handleDeny}
           onBack={() => setView('scoreboard')}
-          onReset={() => alert("Data resets must be performed by Phil Bettley, Directorv-vBettley Tours")}
+          onReset={() => alert("Data resets must be performed by Phil Bettley, Director - Bettley Tours")}
         />
       )}
 
