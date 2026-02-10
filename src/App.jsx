@@ -58,6 +58,13 @@ function App() {
           if (matchingGolfer) {
             console.log("App: Linked to golfer profile:", matchingGolfer.name);
             setUser({ ...matchingGolfer, is_social: true });
+
+            // Self-healing: If matched by email but missing supabase_id, sync it now
+            if (!matchingGolfer.supabase_id) {
+              console.log("App: Auto-syncing Supabase ID for", matchingGolfer.name);
+              linkGolferToSocial(matchingGolfer.id, session.user.email, session.user.id)
+                .catch(err => console.error("App: Auto-sync failed:", err));
+            }
           } else {
             const tempSocialUser = {
               id: session.user.id,

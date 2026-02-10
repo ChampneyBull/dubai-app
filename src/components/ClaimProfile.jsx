@@ -7,8 +7,8 @@ const ClaimProfile = ({ golfers, socialUser, onProfileLinked }) => {
     const [isLinking, setIsLinking] = useState(false);
     const [error, setError] = useState('');
 
-    // Only show golfers who haven't been claimed yet (no email attached)
-    const availableGolfers = golfers.filter(g => !g.email);
+    // Only show golfers who haven't been linked to a social account yet (no supabase_id)
+    const availableGolfers = golfers.filter(g => !g.supabase_id);
 
     const handleClaim = async () => {
         if (!selectedId) return;
@@ -49,8 +49,8 @@ const ClaimProfile = ({ golfers, socialUser, onProfileLinked }) => {
                                 key={golfer.id}
                                 onClick={() => setSelectedId(golfer.id)}
                                 className={`w-full flex items-center p-4 rounded-2xl transition-all border ${selectedId === golfer.id
-                                        ? 'bg-[#7cfc00] border-[#7cfc00] text-black shadow-lg shadow-[#7cfc00]/20 scale-[1.02]'
-                                        : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'
+                                    ? 'bg-[#7cfc00] border-[#7cfc00] text-black shadow-lg shadow-[#7cfc00]/20 scale-[1.02]'
+                                    : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'
                                     }`}
                             >
                                 <div className="w-10 h-10 rounded-xl overflow-hidden mr-4 bg-gray-800">
@@ -73,8 +73,8 @@ const ClaimProfile = ({ golfers, socialUser, onProfileLinked }) => {
                     onClick={handleClaim}
                     disabled={!selectedId || isLinking}
                     className={`w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm transition-all flex items-center justify-center ${selectedId && !isLinking
-                            ? 'bg-white text-black hover:scale-105 shadow-xl'
-                            : 'bg-white/10 text-gray-600 cursor-not-allowed'
+                        ? 'bg-white text-black hover:scale-105 shadow-xl'
+                        : 'bg-white/10 text-gray-600 cursor-not-allowed'
                         }`}
                 >
                     {isLinking ? (
