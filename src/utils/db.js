@@ -44,12 +44,16 @@ export const submitWinnings = async (request) => {
 
 export const approveWinnings = async (requestId, playerId, amount) => {
     // 1. Update request status
-    const { error: reqError } = await supabase
+    const { data: updatedReq, error: reqError } = await supabase
         .from('winnings_requests')
         .update({ status: 'approved' })
-        .eq('id', requestId);
+        .eq('id', requestId)
+        .select();
 
     if (reqError) throw reqError;
+    if (!updatedReq || updatedReq.length === 0) {
+        throw new Error("Update failed: Permission denied or request not found.");
+    }
 
     // 2. Fetch current golfer earnings to be safe
     const { data: golfer, error: fetchError } = await supabase
@@ -70,12 +74,16 @@ export const approveWinnings = async (requestId, playerId, amount) => {
 };
 
 export const denyWinnings = async (requestId) => {
-    const { error } = await supabase
+    const { data, error } = await supabase
         .from('winnings_requests')
         .update({ status: 'denied' })
-        .eq('id', requestId);
+        .eq('id', requestId)
+        .select();
 
     if (error) throw error;
+    if (!data || data.length === 0) {
+        throw new Error("Update failed: Permission denied or request not found.");
+    }
 };
 
 // Link a golfer profile to a social account
