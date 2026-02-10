@@ -109,6 +109,14 @@ function App() {
 
         if (matchingGolfer) {
           setUser({ ...matchingGolfer, is_social: true });
+
+          // Self-healing: Sync ID during fresh login if missing
+          if (!matchingGolfer.supabase_id) {
+            console.log("App: Auto-syncing Supabase ID during login for", matchingGolfer.name);
+            linkGolferToSocial(matchingGolfer.id, session.user.email, session.user.id)
+              .catch(err => console.error("App: Login auto-sync failed:", err));
+          }
+
           setView('scoreboard');
         } else {
           setUser({
